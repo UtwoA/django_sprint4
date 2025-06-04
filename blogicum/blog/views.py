@@ -8,6 +8,7 @@ from django.shortcuts import redirect
 from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
 from django import forms
+from django.db.models import Count
 
 User = get_user_model()
 
@@ -18,7 +19,7 @@ def index(request):
         pub_date__lte=timezone.now(),
         is_published=True,
         category__is_published=True
-    ).order_by('-pub_date')
+    ).annotate(comment_count=Count('comments')).order_by('-pub_date')
 
     paginator = Paginator(post_list, 10)  # 10 постов на страницу
     page_number = request.GET.get('page')

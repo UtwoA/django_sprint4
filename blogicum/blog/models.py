@@ -102,7 +102,6 @@ class Comment(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Автор')
     text = models.TextField('Текст комментария')
     created_at = models.DateTimeField('Дата создания', auto_now_add=True)
-    updated_at = models.DateTimeField('Дата изменения', auto_now=True)
 
     class Meta:
         ordering = ['created_at']

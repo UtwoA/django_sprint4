@@ -12,7 +12,7 @@ urlpatterns = [
         views.category_posts,
         name='category_posts'),
     path('profile/<str:username>/', views.profile, name='profile'),
-    path('create/', views.create_post, name='create_post'),
+    path('posts/create/', views.create_post, name='create_post'),
     path('profile/<str:username>/edit_profile/', views.edit_profile, name='edit_profile'),
     path('posts/<int:id>/edit/', views.edit_post, name='edit_post'),
     path('posts/<int:id>/comment/', views.add_comment, name='add_comment'),

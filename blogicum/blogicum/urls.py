@@ -39,5 +39,9 @@ urlpatterns = [
     path('auth/registration/', SignUpView.as_view(), name='registration'),
 ]
 
+handler404 = 'blogicum.urls.page_not_found'
+handler500 = 'blogicum.urls.server_error'
+handler403 = 'blogicum.urls.csrf_failure'
+
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

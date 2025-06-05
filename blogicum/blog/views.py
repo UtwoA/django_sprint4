@@ -80,12 +80,13 @@ def profile(request, username):
             pub_date__lte=timezone.now(),
             category__is_published=True
         ).order_by('-pub_date')
+    posts = posts.annotate(comment_count=Count('comments'))
     paginator = Paginator(posts, 10)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     is_owner = request.user.is_authenticated and request.user == user
     context = {
-        'profile_user': user,
+        'profile': user,
         'page_obj': page_obj,
         'is_owner': is_owner,
     }

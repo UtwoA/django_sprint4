@@ -13,25 +13,17 @@ User = get_user_model()
 
 
 def add_comment_count(queryset):
-    """
-    Добавляет к каждому посту поле comment_count и сортирует по дате публикации (убывает).
-    """
-    return queryset.annotate(comment_count=Count('comments')).order_by('-pub_date')
+    return (queryset.annotate(comment_count=Count('comments'))
+            .order_by('-pub_date'))
 
 
 def get_page(queryset, request, per_page=10):
-    """
-    Возвращает одну страницу пагинатора для переданного запроса и queryset.
-    """
     paginator = Paginator(queryset, per_page)
     page_number = request.GET.get('page')
     return paginator.get_page(page_number)
 
 
 def published_posts(queryset):
-    """
-    Возвращает только опубликованные посты, доступные по дате и опубликованной категории.
-    """
     return queryset.filter(
         is_published=True,
         pub_date__lte=timezone.now(),
@@ -92,7 +84,8 @@ def profile(request, username):
     if request.user.is_authenticated and request.user == user:
         posts = add_comment_count(Post.objects.filter(author=user))
     else:
-        posts = add_comment_count(published_posts(Post.objects.filter(author=user)))
+        posts = add_comment_count(published_posts(
+            Post.objects.filter(author=user)))
     page_obj = get_page(posts, request)
     is_owner = request.user.is_authenticated and request.user == user
     context = {

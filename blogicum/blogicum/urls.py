@@ -17,7 +17,7 @@ from django.contrib import admin
 from django.urls import include, path
 
 from django.shortcuts import render
-from blogicum.views import profile_view, SignUpView
+from blogicum.views import SignUpView
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -25,11 +25,14 @@ from django.conf.urls.static import static
 def csrf_failure(request, reason=''):
     return render(request, 'pages/403csrf.html', status=403)
 
+
 def page_not_found(request, exception):
     return render(request, 'pages/404.html', status=404)
 
+
 def server_error(request):
     return render(request, 'pages/500.html', status=500)
+
 
 urlpatterns = [
     path('', include('blog.urls', namespace='blog')),
@@ -44,4 +47,5 @@ handler500 = 'blogicum.urls.server_error'
 handler403 = 'blogicum.urls.csrf_failure'
 
 if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    urlpatterns += static(settings.MEDIA_URL,
+                          document_root=settings.MEDIA_ROOT)

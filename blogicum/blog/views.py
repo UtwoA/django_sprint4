@@ -3,7 +3,6 @@ from django.http import Http404
 from django.utils import timezone
 from .models import Post, Category, Comment
 from django.contrib.auth import get_user_model
-from django.views import View
 from django.shortcuts import redirect
 from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
@@ -33,7 +32,9 @@ def index(request):
 def post_detail(request, id):
     post = get_object_or_404(Post, id=id)
     is_owner = request.user.is_authenticated and request.user == post.author
-    if (post.pub_date > timezone.now() or not post.is_published or not post.category.is_published) and not is_owner:
+    if (post.pub_date > timezone.now() or not post.
+            is_published or not post.category.
+            is_published) and not is_owner:
         raise Http404("Публикация недоступна.")
     form = CommentForm()
     comments = post.comments.select_related('author').all()
@@ -151,7 +152,8 @@ def edit_post(request, id):
             return redirect('blog:post_detail', id=post.id)
     else:
         form = PostCreateForm(instance=post)
-    return render(request, 'blog/create.html', {'form': form, 'is_edit': True, 'post': post})
+    return render(request, 'blog/create.html',
+                  {'form': form, 'is_edit': True, 'post': post})
 
 
 class CommentForm(forms.ModelForm):
@@ -159,7 +161,9 @@ class CommentForm(forms.ModelForm):
         model = Comment
         fields = ['text']
         widgets = {
-            'text': forms.Textarea(attrs={'rows': 3, 'placeholder': 'Введите ваш комментарий...'})
+            'text': forms.Textarea(
+                attrs={'rows': 3, 'placeholder': 'Введите ваш комментарий...'}
+            )
         }
 
 
@@ -192,7 +196,8 @@ def edit_comment(request, id, comment_id):
             return redirect('blog:post_detail', id=post.id)
     else:
         form = CommentForm(instance=comment)
-    return render(request, 'blog/comment.html', {'form': form, 'post': post, 'comment': comment})
+    return render(request, 'blog/comment.html',
+                  {'form': form, 'post': post, 'comment': comment})
 
 
 @login_required
@@ -221,4 +226,6 @@ def delete_comment(request, id, comment_id):
     if request.method == 'POST':
         comment.delete()
         return redirect('blog:post_detail', id=post.id)
-    return render(request, 'blog/comment.html', {'form': None, 'post': post, 'comment': comment, 'is_delete': True})
+    return render(request, 'blog/comment.html',
+                  {'form': None, 'post': post, 'comment':
+                      comment, 'is_delete': True})

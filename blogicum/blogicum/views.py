@@ -5,6 +5,8 @@ from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse_lazy
 from django.views.generic.edit import CreateView
 from django.utils import timezone
+from django.contrib.auth.views import LogoutView
+from django.contrib.auth import logout
 
 from blog.models import Post, User
 
@@ -41,3 +43,17 @@ def profile_view(request, username):
         'posts': posts,
         'is_owner': is_owner,
     })
+
+
+class LogoutAllowGetView(LogoutView):
+    def get(self, request, *args, **kwargs):
+        from django.contrib.auth import logout
+        logout(request)
+        context = {'debug_logout': True}
+        return render(request, 'registration/logged_out.html', context)
+
+
+def logout_page(request):
+    if request.user.is_authenticated:
+        logout(request)
+    return render(request, 'registration/logged_out.html')

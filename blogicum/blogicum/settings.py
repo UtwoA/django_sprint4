@@ -141,7 +141,7 @@ handler500 = 'blogicum.urls.server_error'
 CSRF_FAILURE_VIEW = 'blogicum.urls.csrf_failure'
 
 LOGIN_REDIRECT_URL = '/'
-LOGOUT_REDIRECT_URL = '/'
+#LOGOUT_REDIRECT_URL = '/'
 
 LOGIN_URL = '/auth/login/'
 
